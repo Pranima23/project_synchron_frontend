@@ -3,6 +3,7 @@ import StandupCard from './StandupCard'
 import axios from 'axios'
 
 function Home() {
+    // const [standupCardToday, setStandupCardToday] = useState({})
     const [standupCardToday, setStandupCardToday] = useState({
         "team": "",
         "standup_date": "2023-06-19",
@@ -24,7 +25,7 @@ function Home() {
                 "remarks": "test ok for extra field"
             }
         ],
-        "notes": "create standup card test"
+        "notes": "ooo"
     });
     const [standupCardYesterday, setStandupCardYesterday] = useState({
         "id": 43,
@@ -50,12 +51,28 @@ function Home() {
         ],
         "notes": "create standup card test"
     });
-    useEffect(() => {
-        axios
-          .get("http://127.0.0.1:8000/api/standupcard/yesterday/")
-          .then((res) => console.log(res.data[0]))
-          .catch((err) => console.log(err.response.data));
-      }, []);
+   
+    
+    // useEffect(() => {
+    //     const url = 'http://127.0.0.1:8000/api/standupcard/today'; 
+    //     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg3ODgyNjYwLCJpYXQiOjE2ODcwMTg2NjAsImp0aSI6ImQxODY3NjhiYzk0NjQ5NDM5YTM1ODViZTYwMTY5ZTEyIiwidXNlcl9pZCI6M30.svayfAUag7cvMibXKfVELh7JLdATMgJufTYZjcsaD6U'; 
+    //     axios.get(url, {
+    //         headers: {
+    //             'Authorization': `Bearer ${token}`,
+    //             'Content-Type': 'application/json' 
+    //             },
+    //         })
+    //         .then(response => {
+    //             // Handle the response 
+    //             console.log(response.data[1]); 
+    //             const data = response.data[1]
+    //             setStandupCardToday(data)
+    //             updateStandupRemarksToday(data.individual_updates)
+    //         }) 
+    //         .catch(error => {
+    //             // Handle the error 
+    //             console.error(error); });
+    // }, [])
 
     const handleStandupCardTodayChange = (event) => {
         const { name, value} = event.target;
@@ -93,23 +110,52 @@ function Home() {
             })
         );
     }
+    const handleUpdateRemarksToday = (updatedRemarks) => {
+        const updatedStandupCard = { ...standupCardToday };
+           
+        const memberIndex = updatedStandupCard.individual_updates.findIndex(
+        (update) => update.member === updatedRemarks.member
+        );
+
+        if (memberIndex !== -1) {
+        updatedStandupCard.individual_updates[memberIndex].remarks = updatedRemarks.remarks;
+        }
+        setStandupCardToday(updatedStandupCard)
+    }
+    const handleUpdateRemarksYesterday = (updatedRemarks) => {
+        const updatedStandupCard = { ...standupCardToday };
+           
+        const memberIndex = updatedStandupCard.individual_updates.findIndex(
+        (update) => update.member === updatedRemarks.member
+        );
+
+        if (memberIndex !== -1) {
+        updatedStandupCard.individual_updates[memberIndex].remarks = updatedRemarks.remarks;
+        }
+        setStandupCardYesterday(updatedStandupCard)
+    }
     // console.log(standupCardToday)
     // console.log(standupCardYesterday)
    
     return (
         <div>
-            <h1>YESTERDAY</h1>
-            <StandupCard 
-                standupCardData={standupCardYesterday}
-                handleStandupCardChange={handleStandupCardYesterdayChange}
-                updateStandupRemarks={updateStandupRemarksYesterday}
-            />
-            <h1>TODAY</h1>
-            <StandupCard 
-                standupCardData={standupCardToday}
-                handleStandupCardChange={handleStandupCardTodayChange}
-                updateStandupRemarks={updateStandupRemarksToday}
-            />
+            {standupCardToday ? (
+                <div>
+                    <h1>YESTERDAY</h1>
+                    <StandupCard 
+                        standupCardData={standupCardYesterday}
+                        handleStandupCardChange={handleStandupCardYesterdayChange}
+                        handleUpdateRemarksYesterday={handleUpdateRemarksYesterday}
+                    />
+                    <h1>TODAY</h1>
+                    <StandupCard 
+                        standupCardData={standupCardToday}
+                        handleStandupCardChange={handleStandupCardTodayChange}
+                        handleUpdateRemarksToday={handleUpdateRemarksToday}
+                        handleUpdateRemarksYesterday={handleUpdateRemarksYesterday}
+                    />
+                </div>
+            ) : (<p>no data</p>) }
         </div>
     )
 }

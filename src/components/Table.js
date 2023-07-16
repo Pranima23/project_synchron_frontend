@@ -3,7 +3,7 @@ import RemarksItems from './TableRowItems'
 
 
 export function Table(props) {
-    const {standupCardData, updateStandupRemarks} = props
+    const {standupCardData, handleUpdateRemarks} = props
     return (
         <div>
         <table>
@@ -14,7 +14,7 @@ export function Table(props) {
                 </tr>
                 <RemarksItems
                     standupCardData={standupCardData}
-                    updateStandupRemarks={updateStandupRemarks}
+                    handleUpdateRemarks={handleUpdateRemarks}
                 />
                 {/* const remarksList =  */}
                 

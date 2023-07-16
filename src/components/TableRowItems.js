@@ -1,26 +1,12 @@
 import React, { useState, useEffect } from 'react'
 
 export function TableRowItems(props) {
-  const {standupCardData, updateStandupRemarks} = props;
-  const [remarksList, setRemarksList] = useState(standupCardData.individual_updates)
-  const updateRemarksList = (updatedData) => {
-    let remList = remarksList;
-    
-    remList = remList.map((ele) => {
-      if (ele.member === updatedData.member) {
-          ele = updatedData;
-      }    
-      return ele;
-    });
-    setRemarksList((prevData) => remList)   
-  }
-
-  useEffect(() => updateStandupRemarks(remarksList), [remarksList])
+  const {standupCardData, handleUpdateRemarks} = props;
 
   const listItems = standupCardData.individual_updates.map(individual_remarks => 
     <IndividualRemarks 
       individualRemarks={individual_remarks}
-      updateRemarksList={updateRemarksList}
+      handleUpdateRemarks={handleUpdateRemarks}
     />
   );
     
@@ -33,7 +19,7 @@ export function TableRowItems(props) {
 export default TableRowItems
 
 function IndividualRemarks(props) {
-  const { individualRemarks, updateRemarksList } = props
+  const { individualRemarks, handleUpdateRemarks } = props
   const [individualRemarksData, setIndividualRemarksData] = useState(individualRemarks);
   // console.log(individualRemarksData)
   const handleIndividualRemarksDataChange = (event) => {
@@ -43,9 +29,10 @@ function IndividualRemarks(props) {
         ...prevData,
         [name]: value
       }))
+    handleUpdateRemarks(individualRemarksData)
   }
 
-  useEffect(() => updateRemarksList(individualRemarksData), [individualRemarksData])
+  // useEffect(() => updateRemarksList(individualRemarksData), [individualRemarksData])
 
   return(
     <tr>

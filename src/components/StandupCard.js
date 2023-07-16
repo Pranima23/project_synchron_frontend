@@ -4,7 +4,7 @@ import StandupInfo from './StandupInfo'
 import StandupQuestions from './StandupQuestions'
 
 function StandupCard(props) {
-  const {standupCardData, handleStandupCardChange, updateStandupRemarks} = props;
+  const {standupCardData, handleStandupCardChange, handleUpdateRemarks} = props;
   // const [standupCardData, setStandupCardData] = useState(standupCard);
   // console.log(standupCardData.individual_updates)
   // console.log(standupCard.id)
@@ -17,8 +17,11 @@ function StandupCard(props) {
       <StandupQuestions/>
       <Remarks 
         standupCardData={standupCardData}
-        updateStandupRemarks={updateStandupRemarks}
+        handleUpdateRemarks={handleUpdateRemarks}
       />
+      <label> Notes:
+        {standupCardData.notes}
+      </label>
     </div>
   )
 }
